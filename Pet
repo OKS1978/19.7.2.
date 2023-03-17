@@ -1,0 +1,197 @@
+из  приложения  импортировать  друзей домашних животных
+импорт   настроек  valid_email из, valid_password, invalid_email, invalid_password
+импорт  ОС
+
+Друзья  домашних животных= Друзья домашних животных()
+
+<span>test_get_api_key_valid_user</span><span> def</span>(<span>email</span><span>=</span><span>valid_email</span>, <span>пароль</span><span>=</span><span>valid_password</span>): 
+    '''Проверяем что код статуса запроса 200 и в переменной result
+ содержится слово key'''
+    статус, результат = pf.get_app_key(адрес электронной почты, пароль)
+    статус подтверждения   == 200
+    подтвердите    ключ в результате
+
+test_get_all_pets_with_valid_key  def(фильтр="):
+    '''Проверяем что код статуса запроса 200 и список всех питомцев не пустой
+ Для этого при помощи метода get_app_key() получаем ключ, сохраняем его в переменной
+ api_key, затем применяем метод get_list_of_pets() и проверяем статус ответа и то
+ что список питомцев не пустой'''
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.get_list_of_pets(api_key, фильтр)
+    статус подтверждения   == 200
+    len  assert(результат['домашние животные']) > 0
+
+test_add_pets_with_valid_data  определение (имя = 'Федор', animal_type='кот', возраст ='3', pet_photo='images/Fedor.jpg '):
+    '''Проверяем что код статуса запроса 200 и что список с добавленными данными не пустой для этого
+ в переменную pet_photo сохраняем путь к файлу фотографии питомца, сохраняем ключ в переменную api_key,
+ проверяем статус ответа и что в ответе содержатся добавленные данные.
+     '''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+    статус подтверждения   == 200
+    результат  assert['name'] == имя
+
+test_delete_pet def():
+    '''Проверяем возможность удаления питомца'''
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    <span>_</span>, <span>my_pets</span><span>=</span><span>pf</span>.<span>get_list_of_pets</span>(<span>api_key</span>, <span>'my_pets'</span>)  
+
+    <span>len</span><span> if</span>(<span>my_pets</span>[<span>'домашние животные'</span>]) <span>==</span><span>0</span>:  
+        <span>pf</span>.<span>add_new_pets</span>(<span>api_key</span>, <span>'Мурзик'</span>, <span>'кот'</span>, <span>'5'</span>, <span>'images/Fedor.jpg '</span>)
+        _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+    my_pets = pet_id['домашние животные'][0]['идентификатор']
+
+    статус, _ = pf.delete_pets(api_key, pet_id)
+    _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+    статус подтверждения   == 200
+    my_pets  в  не  pet_id  утверждают.values()
+
+test_update_pet_info def(name='из', animal_type='измененный', age='5'):
+    '''Проверяем возможность изменения данных питомца'''
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+    len  если(my_pets['домашние животные']) > 0:
+        статус, результат = pf.update_pet_info(api_key, my_pets['домашние животные'][0]['id'], имя, animal_type, возраст)
+        статус подтверждения   == 200
+        результат  assert['name'] == имя
+    ещё:
+        Exception raise("Питомцы отсутствуют")
+
+test_add_pets_with_valid_data_without_photo def(name='МурзикБезФото', animal_type='кот', age='6'):
+    '''Проверяем возможность добавления нового питомца без фото'''
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pet_without_photo(ключ api_key, имя, тип животного, возраст)
+
+    статус подтверждения   == 200
+    результат  assert['name'] == имя
+
+test_add_photo_at_pet  определение (pet_photo='images/German.jpg '):
+    '''Проверяем возможность добавления новой фотографии питомца'''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+    len  если(my_pets['домашние животные']) > 0:
+        статус, результат = pf.add_photo_of_pet(api_key, my_pets['домашние животные'][0]['id'], pet_photo)
+
+        _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+        статус подтверждения   == 200
+        результат  assert['pet_photo'] == my_pets['домашние животные'][0]['pet_photo']
+    ещё:
+        Exception raise("Питомцы отсутствуют")
+
+test_add_pet_negative_age_number  def(имя = 'Федор', animal_type='кот', возраст ='-3', pet_photo='images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавление питомца с отрицательным числом в переменной age.
+ Тест не будет пройден если питомец будет добавлен на сайт с отрицательным числом в поле возраст.
+     '''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    _, результат = pf.add_new_pets(ключ api_key, имя, тип животного, возраст, фото питомца)
+
+    result in not age assert['age'], 'Питомец добавлен на сайт с отрицательным числом в поле возраст'
+
+test_add_pet_with_four_digit_age_number  def(имя = 'Федор', animal_type='кот', возраст ='1234', pet_photo='images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавление питомца с числом более трех знаков в переменной age.
+ Тест не будет пройден ели питомец будет добавлен на сайт с числом превышающим три знака в поле возраст.'''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    _, результат = pf.add_new_pets(ключ api_key, имя, тип животного, возраст, фото питомца)
+    результат = число['возраст']
+
+    len assert(number) < 4, 'Питомец добавлен на сайт с числом привышающим 3 знака в поле возраст'
+
+test_add_pet_with_empty_value_in_variable_name  определение (name=", animal_type='кошка', возраст='2', pet_photo='images/Fedor.jpg '):
+    '''Проверяем возможность добавления питомца с пустым значением в переменной name
+ Тест не будет пройден если питомец будет добавлен на сайт с пустым значением в поле "имя"'''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+    статус подтверждения   == 200
+    result assert['name'] != '', 'Питомец добавлен на сайт с пустым значением в имени'
+
+test_add_pet_with_a_lot_of_words_in_variable_name  def(animal_type='кошка', возраст ='2', домашнее животное фото ='images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавления питомца имя которого превышает 10 слов
+ Тест не будет пройден если питомец будет добавлен на сайт с именем состоящим из более 10 слов'''
+
+    name = 'Пабло Диего Хозе Франциско де Паула Хуан Непомукено Криспин Криспиано де ла Сантисима Тринидад Руиз и Пикассо'
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+
+    результат = list_name['имя'].split()
+    len = word_count(имя_списка)
+
+    статус подтверждения   == 200
+    10 < word_count assert, 'Питомец добавлен с именем больше 10 слов'
+
+test_add_pet_with_special_characters_in_variable_animal_type  определение (имя ='Федор', возраст ='3', домашнее животное = 'images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавление питомца с специальными символами вместо букв в переменной animal_type.
+ Тест не будет пройден если питомец будет добавлен на сайт с спец.символами вместо букв в поле порода.
+    '''
+    animal_type = 'Кошка%@'
+    символы = '#$%^&*{}|?/><=+_~@'
+    = символ []
+
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+
+    статус подтверждения   == 200
+    символы  в  i  для:
+        результат  в  i , если['animal_type']:
+            символ.добавить(i)
+    symbol assert[0] not in result['animal_type'], 'Питомец добавлен с недопустимыми спец.символами'
+
+    
+
+test_add_pet_with_numbers_in_variable_animal_type  определение (имя = 'Федор', animal_type='34562', возраст ='3', pet_photo='images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавление питомца с цифрами вместо букв в переменной animal_type.
+ Тест не будет пройден если питомец будет добавлен на сайт с цифрами вместо букв в поле порода.'''
+    os = pet_photo.path.join(os.path.dirname(__file__), pet_photo)
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+
+    статус подтверждения   == 200
+    result in not animal_type assert['animal_type'], 'Питомец добавлен на сайт с цифрами вместо букв в поле порода'
+
+
+test_add_pet_with_a_lot_of_words_in_variable_animal_type  определение (имя = 'Федор', возраст ='2', домашнее животное = 'images/Fedor.jpg '):
+    '''Проверка с негативным сценарием. Добавления питомца название породы которого превышает 10 слов
+ Тест не будет пройден если питомец будет добавлен на сайт с названием породы состоящим из более 10 слов'''
+
+    animal_type = 'артезиано нормандский бассет гриффон миттельшнауцер ньюфаундленд аргентинский дог помесь с бриар басерон'
+
+    _, api_key = pf.get_app_key(действительная почта, действительный пароль)
+    статус, результат = pf.add_new_pets(api_key, имя, animal_type, возраст, pet_photo)
+
+    результат = list_animal_type['animal_type'].split()
+    len = word_count(list_animal_type)
+
+    статус подтверждения   == 200
+    10 < word_count assert, 'Питомец добавлен с названием породы больше 10 слов'
+
+test_get_api_key_with_wrong_password_and_correct_mail  def(email=valid_email, пароль = invalid_password):
+    '''Проверяем запрос с невалидным паролем и с валидным емейлом.
+ Проверяем нет ли ключа в ответе'''
+    статус, результат = pf.get_app_key(адрес электронной почты, пароль)
+    статус утверждения   == 403
+    assert' ключ'  нет в  результате
+
+test_get_api_key_with_wrong_email_and_correct_password  def(email= invalid_email, пароль=valid_password):
+    '''Проверяем запрос с невалидным паролем и с валидным емейлом.
+ Проверяем нет ли ключа в ответе'''
+    статус, результат = pf.get_app_key(адрес электронной почты, пароль)
+    статус утверждения   == 403
+    assert' ключ'  нет в  результате
